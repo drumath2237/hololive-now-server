@@ -7,6 +7,10 @@ export async function getScheduleDataAsync () {
 
   await client.fetch(url)
   .then(result=>{
+
+    console.log(result.$('div#hololive').children('.container').html());
+    
+    
     result.$('div#hololive')
     .children('.container')
     .children('.row')
