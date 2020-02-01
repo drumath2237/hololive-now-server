@@ -17,7 +17,7 @@ export async function getScheduleDataAsync () {
     .children()
     .children('.row')
     .children('div')
-    .children('a.thumbnail')
+    .children('a.thumbnail') // ここで各ライブ情報
     .children('.container')
     .children('.row')
     .children('div')
@@ -36,4 +36,25 @@ export async function getScheduleDataAsync () {
     })
   })
   return datas;
+}
+
+export async function getHoloduleIndividualData() {
+  let cheerio_result:Cheerio;
+
+  client.fetch(url)
+  .then(result=>{
+    cheerio_result = 
+      result.$('div#hololive')
+      .children('div.container')
+      .children('.row')
+      .children()
+      .children('.row')
+      .children('div')
+      .children('a.thumbnail')
+  })
+  .catch(error=>{
+    console.log('error' + error);
+  })
+
+  return await cheerio_result;
 }
