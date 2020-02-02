@@ -20,7 +20,7 @@ function getJapanHourFromDate(d: Date): number {
 }
 
 server.on('request', (req,res:http.ServerResponse)=>{
-  if(getJapanMinuteFromDate(new Date())/15 != getJapanMinuteFromDate(last_request)/15){
+  if(Math.floor(getJapanMinuteFromDate(new Date())/15) != Math.floor(getJapanMinuteFromDate(last_request)/15)){
       console.log('get from holodule');
       Schedule.getScheduleDataAsync()
         .then(Analyzer.analyzeAndGetLiveData)

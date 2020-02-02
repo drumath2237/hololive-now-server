@@ -10,6 +10,6 @@
     "typescript": "^3.7.5"
   },
   "scripts": {
-    "start": "yarn run ts-node ./app.ts"
+    "start": "yarn run ts-node -T ./app.ts"
   }
 }
