@@ -20,16 +20,15 @@ export function analyzeAndGetLiveData(domData:Cheerio) {
     })
   })
 
-  // TODO: 日付の処理を適切に
-  // datas = datas.map((v,i,a)=>{
-  //   v.streaming.datetime.setUTCDate(v.streaming.datetime.getUTCDate()-1)
-  //   return v
-  // })
-
-  // datas = datas.map((v,i,a)=>{
-  //   if(i+1===a.length) return v
-  //   return v;
-  // })
+  // // 日付の処理
+  let date_offset = -1;
+  datas[0].streaming.datetime.setUTCDate(datas[0].streaming.datetime.getUTCDate()+date_offset);
+  for(let i:number=1; i<datas.length; i++){
+    if (getJapanHourFromDate(datas[i].streaming.datetime) < getJapanHourFromDate(datas[i-1].streaming.datetime)){
+      date_offset++;
+    }
+    datas[i].streaming.datetime.setUTCDate(datas[i].streaming.datetime.getUTCDate()+date_offset);
+  }
 
   return new Promise((resolve:(r:LiveData.LiveData[])=>void,_)=>{
     resolve(datas);
@@ -44,12 +43,16 @@ function getDateFromTimeString(expr:string):Date {
   return res;
 }
 
+function getJapanHourFromDate(d:Date):number {
+  return Number(d.toLocaleTimeString('ja').split(':')[0]);
+}
+
 Schedule.getScheduleDataAsync()
 .then(analyzeAndGetLiveData)
 .then(data=>{
   data.forEach((v,i,a)=>{
-    if(v.streaming.now){
-      console.log(v.streaming.datetime.toLocaleDateString('ja'));
-    }
+    // if(v.streaming.now){
+      console.log(v.streaming.datetime.toLocaleString('ja'), v.member.name);
+    // }
   })
 })
