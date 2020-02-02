@@ -47,12 +47,12 @@ function getJapanHourFromDate(d:Date):number {
   return Number(d.toLocaleTimeString('ja').split(':')[0]);
 }
 
-Schedule.getScheduleDataAsync()
-.then(analyzeAndGetLiveData)
-.then(data=>{
-  data.forEach((v,i,a)=>{
-    // if(v.streaming.now){
-      console.log(v.streaming.datetime.toLocaleString('ja'), v.member.name);
-    // }
-  })
-})
+// Schedule.getScheduleDataAsync()
+// .then(analyzeAndGetLiveData)
+// .then(data=>{
+//   data.forEach((v,i,a)=>{
+//     // if(v.streaming.now){
+//       console.log(v.streaming.datetime.toLocaleString('ja'), v.member.name);
+//     // }
+//   })
+// })
