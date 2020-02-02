@@ -5,25 +5,69 @@ import LiveData = require('./src/live-data')
 import http = require('http')
 
 let server = http.createServer();
+
+let last_request = new Date();
+let liver_data:LiveData.LiveData[];
+Schedule.getScheduleDataAsync()
+  .then(Analyzer.analyzeAndGetLiveData)
+  .then(datas => liver_data = datas);
+
+function getJapanMinuteFromDate(d: Date): number {
+  return Number(d.toLocaleTimeString('ja').split(':')[1])
+}
+function getJapanHourFromDate(d: Date): number {
+  return Number(d.toLocaleTimeString('ja').split(':')[0])
+}
+
 server.on('request', (req,res:http.ServerResponse)=>{
-  console.log(req.url)
-  if(req.url=='/api/schedule') {
-    res.writeHead(200, {'Content-Type':'application/json; charset=utf-8'})
-    Schedule.getScheduleDataAsync()
-    .then(Analyzer.analyzeAndGetLiveData)
-    .then(datas=>{
-      res.write(unescape(JSON.stringify(datas)));
+  if(getJapanMinuteFromDate(new Date())/15 != getJapanMinuteFromDate(last_request)/15){
+      console.log('get from holodule');
+      Schedule.getScheduleDataAsync()
+        .then(Analyzer.analyzeAndGetLiveData)
+        .then(datas => {
+          liver_data = datas
+          if (req.url == '/api/schedule') {
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
+            res.write(JSON.stringify(liver_data))
+            res.end();
+          } else if (req.url == '/api/schedule/now') {
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
+            res.write(JSON.stringify(liver_data.filter(x => x.streaming.now)));
+            res.end();
+          }
+
+        });
+  } else if (getJapanHourFromDate(new Date()) != getJapanHourFromDate(last_request)) {
+      console.log('get from holodule');
+      Schedule.getScheduleDataAsync()
+        .then(Analyzer.analyzeAndGetLiveData)
+        .then(datas => {
+          liver_data = datas
+          if (req.url == '/api/schedule') {
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
+            res.write(JSON.stringify(liver_data))
+            res.end();
+          } else if (req.url == '/api/schedule/now') {
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
+            res.write(JSON.stringify(liver_data.filter(x => x.streaming.now)));
+            res.end();
+          }
+
+        });
+  }else{
+    if (req.url == '/api/schedule') {
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
+      res.write(JSON.stringify(liver_data))
       res.end();
-    })
-  }else if(req.url=='/api/schedule/now') {
-    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
-    Schedule.getScheduleDataAsync()
-      .then(Analyzer.analyzeAndGetLiveData)
-      .then(datas => {
-        res.write(unescape(JSON.stringify(datas.filter(x=>x.streaming.now))));
-        res.end();
-      })
+    } else if (req.url == '/api/schedule/now') {
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
+      res.write(JSON.stringify(liver_data.filter(x => x.streaming.now)));
+      res.end();
+    }
   }
+
+  last_request = new Date()
+
 })
 
 server.listen(3000);
