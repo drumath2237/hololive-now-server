@@ -10,7 +10,9 @@ let last_request = new Date();
 let liver_data:LiveData.LiveData[];
 Schedule.getScheduleDataAsync()
   .then(Analyzer.analyzeAndGetLiveData)
-  .then(datas => liver_data = datas);
+  .then(datas => liver_data = datas)
+  .catch(err=>{console.log("error in app.ts at init: ", err);
+  });
 
 function getJapanMinuteFromDate(d: Date): number {
   return Number(d.toLocaleTimeString('ja').split(':')[1])
@@ -36,6 +38,10 @@ server.on('request', (req,res:http.ServerResponse)=>{
             res.end();
           }
 
+        })
+        .catch(err =>{
+          console.log("error in app.ts: ", err);
+          
         });
   } else if (getJapanHourFromDate(new Date()) != getJapanHourFromDate(last_request)) {
       console.log('get from holodule');
@@ -53,7 +59,12 @@ server.on('request', (req,res:http.ServerResponse)=>{
             res.end();
           }
 
+        })
+        .catch(err =>{
+          console.log("error in app.ts: ", err);
+          
         });
+
   }else{
     if (req.url == '/api/schedule') {
       res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
