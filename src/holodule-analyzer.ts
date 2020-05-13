@@ -4,8 +4,10 @@ import * as LiveData from './live-data'
 import * as Schedule from './schedule'
 
 export function analyzeAndGetLiveData(domData:Cheerio) {
+  // console.log(domData.length);
+  
   let datas:LiveData.LiveData[] = [];
-  domData.each((i,e)=>{
+  domData.each((i,e)=>{    
     datas.push({
       member: {
         name: e.childNodes[1].childNodes[1].childNodes[1].childNodes[1].childNodes[3].childNodes[0].data.trim(),
@@ -21,7 +23,7 @@ export function analyzeAndGetLiveData(domData:Cheerio) {
   })
 
   // // 日付の処理
-  let date_offset = -1;
+  let date_offset = -1;  
   datas[0].streaming.datetime.setUTCDate(datas[0].streaming.datetime.getUTCDate()+date_offset);
   for(let i:number=1; i<datas.length; i++){
     if (getJapanHourFromDate(datas[i].streaming.datetime) < getJapanHourFromDate(datas[i-1].streaming.datetime)){
