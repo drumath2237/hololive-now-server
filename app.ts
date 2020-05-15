@@ -29,11 +29,11 @@ server.on('request', (req,res:http.ServerResponse)=>{
         .then(datas => {
           liver_data = datas
           if (req.url == '/api/schedule') {
-            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' })
             res.write(JSON.stringify(liver_data))
             res.end();
           } else if (req.url == '/api/schedule/now') {
-            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' })
             res.write(JSON.stringify(liver_data.filter(x => x.streaming.now)));
             res.end();
           }
@@ -50,11 +50,11 @@ server.on('request', (req,res:http.ServerResponse)=>{
         .then(datas => {
           liver_data = datas
           if (req.url == '/api/schedule') {
-            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' })
             res.write(JSON.stringify(liver_data))
             res.end();
           } else if (req.url == '/api/schedule/now') {
-            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' })
             res.write(JSON.stringify(liver_data.filter(x => x.streaming.now)));
             res.end();
           }
@@ -67,11 +67,11 @@ server.on('request', (req,res:http.ServerResponse)=>{
 
   }else{
     if (req.url == '/api/schedule') {
-      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' })
       res.write(JSON.stringify(liver_data))
       res.end();
     } else if (req.url == '/api/schedule/now') {
-      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' })
       res.write(JSON.stringify(liver_data.filter(x => x.streaming.now)));
       res.end();
     }
